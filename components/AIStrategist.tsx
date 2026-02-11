@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, Loader2, BookOpen, Target, Clock, ArrowRight, Lightbulb } from 'lucide-react';
+import { Sparkles, Loader2, BookOpen, Target, Clock, ArrowRight, Lightbulb, ShieldCheck } from 'lucide-react';
 import { generateTrainingStrategy, analyzeSkillGap } from '../services/geminiService';
 import { AIPlanResponse } from '../types';
 
@@ -48,7 +48,7 @@ const AIStrategist: React.FC = () => {
           <h2 className="text-3xl font-bold tracking-tight">Strategic Illumination Hub</h2>
         </div>
         <p className="text-orange-50 max-w-2xl font-medium text-lg relative z-10 leading-relaxed">
-          Ignite workforce potential. Design structured training pathways or shed light on critical skill gaps with our AI-driven intelligence engine.
+          Ignite workforce potential with <strong>SFIA-aligned</strong> pathways. Design structured curriculums or shed light on critical skill gaps using the global standard.
         </p>
         
         <div className="flex space-x-4 mt-8 relative z-10">
@@ -70,7 +70,7 @@ const AIStrategist: React.FC = () => {
               : 'bg-white/10 text-white hover:bg-white/20 border border-white/30 backdrop-blur-sm'
             }`}
           >
-            Skills Gap Analyzer
+            SFIA Gap Analyzer
           </button>
         </div>
       </div>
@@ -80,7 +80,7 @@ const AIStrategist: React.FC = () => {
         <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
           <h3 className="text-lg font-bold text-slate-800 mb-6 flex items-center">
             {activeMode === 'create' ? <BookOpen className="mr-2 text-orange-500" size={20}/> : <Target className="mr-2 text-orange-500" size={20}/>}
-            {activeMode === 'create' ? 'Program Parameters' : 'Analysis Context'}
+            {activeMode === 'create' ? 'Program Parameters' : 'SFIA Analysis Context'}
           </h3>
           
           {activeMode === 'create' ? (
@@ -176,27 +176,38 @@ const AIStrategist: React.FC = () => {
           {loading ? (
             <div className="h-full flex flex-col items-center justify-center text-slate-400">
               <Loader2 className="w-12 h-12 animate-spin mb-4 text-orange-500" />
-              <p className="font-medium text-slate-500">Consulting Intelligence Models...</p>
+              <p className="font-medium text-slate-500">Consulting SFIA Framework Models...</p>
             </div>
           ) : activeMode === 'create' && generatedPlan ? (
             <div className="space-y-6 animate-fade-in">
               <div className="border-b border-slate-200 pb-4">
-                <h2 className="text-2xl font-bold text-slate-800 bg-clip-text text-transparent bg-gradient-to-r from-orange-600 to-rose-600">
-                    {generatedPlan.title}
-                </h2>
+                <div className="flex justify-between items-start">
+                    <h2 className="text-2xl font-bold text-slate-800 bg-clip-text text-transparent bg-gradient-to-r from-orange-600 to-rose-600">
+                        {generatedPlan.title}
+                    </h2>
+                    <span className="bg-slate-800 text-white text-[10px] uppercase font-bold px-2 py-1 rounded tracking-wider">SFIA Aligned</span>
+                </div>
                 <p className="text-slate-600 mt-2 leading-relaxed">{generatedPlan.overview}</p>
               </div>
               <div className="space-y-4">
                 {generatedPlan.modules.map((mod, idx) => (
                   <div key={idx} className="bg-white p-5 rounded-lg border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                    <div className="flex justify-between items-start mb-2">
+                    <div className="flex flex-col sm:flex-row justify-between items-start mb-2 gap-2">
                       <h4 className="font-bold text-slate-800 flex items-center text-lg">
                         <span className="bg-orange-100 text-orange-700 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold mr-3 border border-orange-200">{idx + 1}</span>
                         {mod.name}
                       </h4>
-                      <div className="flex items-center text-xs font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
-                        <Clock size={12} className="mr-1.5" />
-                        {mod.duration}
+                      <div className="flex space-x-2">
+                        <div className="flex items-center text-xs font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full border border-slate-200">
+                            <Clock size={12} className="mr-1.5" />
+                            {mod.duration}
+                        </div>
+                        {mod.sfiaLevel && (
+                            <div className="flex items-center text-xs font-bold text-blue-700 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
+                                <ShieldCheck size={12} className="mr-1.5" />
+                                {mod.sfiaLevel}
+                            </div>
+                        )}
                       </div>
                     </div>
                     <ul className="pl-10 space-y-2 mt-3">
@@ -220,7 +231,10 @@ const AIStrategist: React.FC = () => {
                     <div className="bg-rose-100 p-2 rounded-lg mr-3">
                         <Target className="text-rose-600" size={24} />
                     </div>
-                    <h3 className="text-xl font-bold text-slate-800 m-0">Gap Analysis Report</h3>
+                    <div>
+                        <h3 className="text-xl font-bold text-slate-800 m-0">SFIA Gap Analysis Report</h3>
+                        <p className="text-xs text-slate-400 font-medium">AUTONOMY • INFLUENCE • COMPLEXITY</p>
+                    </div>
                 </div>
                 <div className="bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
                     <div className="whitespace-pre-wrap text-slate-700 text-sm leading-relaxed">
@@ -233,7 +247,9 @@ const AIStrategist: React.FC = () => {
               <div className="bg-slate-100 p-6 rounded-full mb-4">
                  <Sparkles className="w-10 h-10 text-slate-300" />
               </div>
-              <p className="font-medium">Strategic insights will illuminate here.</p>
+              <p className="font-medium text-center max-w-xs">
+                  Strategic insights will illuminate here, powered by the <br/><span className="text-blue-500 font-bold">SFIA Framework</span>.
+              </p>
             </div>
           )}
         </div>

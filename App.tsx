@@ -3,6 +3,7 @@ import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
 import AIStrategist from './components/AIStrategist';
 import BudgetManager from './components/BudgetManager';
+import NeedsAssessment from './components/NeedsAssessment';
 import { Building2, Plus } from 'lucide-react';
 
 // Placeholder components for sections not fully detailed in this pass
@@ -21,6 +22,8 @@ const App: React.FC = () => {
     switch (activeTab) {
       case 'dashboard':
         return <Dashboard />;
+      case 'assessment':
+        return <NeedsAssessment />;
       case 'strategy':
         return <AIStrategist />;
       case 'budget':
@@ -46,7 +49,7 @@ const App: React.FC = () => {
           <div>
             <h1 className="text-2xl font-bold text-slate-800 capitalize">{activeTab.replace('-', ' ')}</h1>
             <p className="text-slate-500 text-sm mt-1">
-              Welcome back, Group Head of Talent
+              Welcome back, Group Manager - Training
             </p>
           </div>
           

@@ -38,5 +38,21 @@ export interface AIPlanResponse {
     name: string;
     objectives: string[];
     duration: string;
+    sfiaLevel?: string; // Added for SFIA integration
   }[];
+}
+
+export interface SurveyQuestion {
+  id: string;
+  question: string;
+  type: 'scale' | 'text' | 'choice';
+  rationale: string; // The strategic reason for asking this
+  options?: string[]; // For choice types
+}
+
+export interface SurveyPlan {
+  title: string;
+  description: string;
+  targetAudience: string;
+  questions: SurveyQuestion[];
 }
