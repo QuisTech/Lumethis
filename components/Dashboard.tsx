@@ -29,10 +29,10 @@ const Dashboard: React.FC = () => {
         />
         <StatCard 
           title="Budget Utilized" 
-          value="42%" 
-          change="On track" 
+          value="0%" 
+          change="Pending Init." 
           icon={CheckCircle} 
-          color="bg-emerald-500" 
+          color="bg-slate-400" 
         />
         <StatCard 
           title="Compliance Gaps" 
@@ -72,17 +72,17 @@ const Dashboard: React.FC = () => {
             <ApprovalItem 
               title="Leadership Seminar Budget" 
               requestor="Sarah Jenkins (HR)" 
-              amount="$4,500" 
+              amount="₦ 4,500,000" 
             />
             <ApprovalItem 
               title="External Vendor: Safety Co." 
               requestor="Mike Ross (Ops)" 
-              amount="$2,200" 
+              amount="₦ 2,200,000" 
             />
             <ApprovalItem 
               title="New Hire Induction Kit" 
               requestor="Admin Team" 
-              amount="$800" 
+              amount="₦ 800,000" 
             />
           </div>
           <button className="w-full mt-6 py-2 text-sm text-blue-600 font-medium hover:bg-blue-50 rounded-lg transition-colors">

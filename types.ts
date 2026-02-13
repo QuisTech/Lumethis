@@ -2,7 +2,21 @@ export enum Subsidiary {
   EIB_HOLDINGS = 'EIB Holdings',
   TECH_SOLUTIONS = 'Tech Solutions Ltd',
   LOGISTICS_PRO = 'Logistics Pro',
-  RETAIL_ARM = 'Retail Arm'
+  RETAIL_ARM = 'Retail Arm',
+  BRIGHT_FM = 'Bright FM (Broadcast)',
+  BRIECH_UAS = 'Briech UAS (Drone Ops)',
+  LUFTREIBER_AUTO = 'Luftreiber Automotive',
+  BRIECH_ATLANTIC = 'Briech Atlantic (Construction & FM)'
+}
+
+export type UserRole = 'GROUP_ADMIN' | 'SUBSIDIARY_MANAGER';
+
+export interface UserProfile {
+  id: string;
+  name: string;
+  role: UserRole;
+  subsidiary?: Subsidiary; // If undefined, they are Group level
+  jobTitle?: string;
 }
 
 export interface TrainingProgram {
@@ -14,6 +28,27 @@ export interface TrainingProgram {
   budget: number;
   startDate: string;
   category: 'Technical' | 'Leadership' | 'Operational' | 'Soft Skills';
+}
+
+export interface ModuleContent {
+  title: string;
+  objectives: string[];
+  duration?: string;
+  keyTopics?: string[];
+}
+
+export interface ProgramSubmission {
+  id: string;
+  submittedBy: string;
+  submissionDate: string;
+  title: string;
+  subsidiary: Subsidiary;
+  version: string;
+  status: 'Pending Review' | 'Changes Requested' | 'Group Approved' | 'Active';
+  complianceScore: number; // 0-100 based on Group Standards
+  overview: string;
+  modules: ModuleContent[];
+  requestNotes?: string; // Content from the memo
 }
 
 export interface BudgetRecord {
@@ -38,7 +73,7 @@ export interface AIPlanResponse {
     name: string;
     objectives: string[];
     duration: string;
-    sfiaLevel?: string; // Added for SFIA integration
+    sfiaLevel?: string; 
   }[];
 }
 
@@ -46,8 +81,8 @@ export interface SurveyQuestion {
   id: string;
   question: string;
   type: 'scale' | 'text' | 'choice';
-  rationale: string; // The strategic reason for asking this
-  options?: string[]; // For choice types
+  rationale: string;
+  options?: string[];
 }
 
 export interface SurveyPlan {
