@@ -6,7 +6,9 @@ export enum Subsidiary {
   BRIGHT_FM = 'Bright FM (Broadcast)',
   BRIECH_UAS = 'Briech UAS (Drone Ops)',
   LUFTREIBER_AUTO = 'Luftreiber Automotive',
-  BRIECH_ATLANTIC = 'Briech Atlantic (Construction & FM)'
+  BRIECH_ATLANTIC = 'Briech Atlantic (Construction & FM)',
+  BRIGHT_ECHEFU_FOUNDATION = 'Bright Echefu Foundation',
+  POCTOVA = 'Poctova'
 }
 
 export type UserRole = 'GROUP_ADMIN' | 'SUBSIDIARY_MANAGER';
@@ -14,6 +16,7 @@ export type UserRole = 'GROUP_ADMIN' | 'SUBSIDIARY_MANAGER';
 export interface UserProfile {
   id: string;
   name: string;
+  email: string;
   role: UserRole;
   subsidiary?: Subsidiary; // If undefined, they are Group level
   jobTitle?: string;
@@ -90,4 +93,44 @@ export interface SurveyPlan {
   description: string;
   targetAudience: string;
   questions: SurveyQuestion[];
+}
+
+export interface KPIItem {
+  area: string;
+  kpi: string;
+  target: string;
+  measurementFrequency: string;
+  owner: string;
+}
+
+export interface KPIPlan {
+  title: string;
+  level: string; // Staff, Unit, Manager, Subsidiary
+  strategicFocus: string;
+  kpis: KPIItem[];
+}
+
+export interface PDPAction {
+  category: 'Formal Training' | 'Experience/Project' | 'Mentoring/Coaching' | 'Self-Study';
+  action: string;
+  timeline: string;
+  successCriteria: string;
+}
+
+export interface PDPPlan {
+  employeeName: string;
+  currentRole: string;
+  careerGoal: string;
+  strengths: string[];
+  developmentAreas: string[];
+  actionPlan: PDPAction[];
+  cpdRecommendations: string[]; // Recommended topics for CPD
+}
+
+export interface TeachingNotes {
+  title: string;
+  introduction: string;
+  keyConcepts: string[];
+  discussionQuestions: string[];
+  summary: string;
 }

@@ -8,203 +8,33 @@ import {
   Download,
   MessageSquare
 } from 'lucide-react';
-import { ProgramSubmission, Subsidiary, UserProfile } from '../types';
-
-// Hardcoded data derived from the User's input
-const ALL_SUBMISSIONS: ProgramSubmission[] = [
-  {
-    id: 'sub-004',
-    subsidiary: Subsidiary.BRIECH_ATLANTIC,
-    title: 'Standard Operating Procedures (Construction & FM)',
-    version: '1.0',
-    submittedBy: 'General Manager (Operations)',
-    submissionDate: '2026-02-20',
-    status: 'Pending Review',
-    complianceScore: 85,
-    requestNotes: 'Submitted for Group review. Covers Construction, FM, Assets, and Logistics units. Includes specific Project Team protocols for design and execution.',
-    overview: 'Comprehensive SOPs guiding all staff through standardized procedures to ensure operational efficiency, safety, and compliance across core business units.',
-    modules: [
-      {
-        title: 'General Operational Guidelines',
-        objectives: ['Define work hours & attendance', 'Mandate HSE & PPE compliance', 'Establish reporting hierarchy'],
-        keyTopics: ['Code of Conduct', 'Toolbox talks', 'Daily/Weekly Reports']
-      },
-      {
-        title: 'Construction Services SOP',
-        objectives: ['Project Initiation & Feasibility', 'Execution Planning & Design', 'Quality Control & Handover'],
-        keyTopics: ['Site Assessment', 'LPOs', 'Snagging', 'As-built documentation']
-      },
-      {
-        title: 'Facility Management SOP',
-        objectives: ['Routine & Preventive Maintenance', 'Vendor & Staff Management', 'Diesel Supply Chain Control'],
-        keyTopics: ['SLA Reviews', 'Diesel Inventory', 'HSE Audits', 'Site Surveys']
-      },
-      {
-        title: 'Asset & Logistics Operations',
-        objectives: ['Asset Tagging & Lifecycle tracking', 'Fleet Management', 'Vehicle Servicing protocols'],
-        keyTopics: ['Asset Register', 'Depreciation', 'Service History', 'Preventive Maintenance']
-      },
-      {
-        title: 'Project Team Lifecycle',
-        duration: 'Variable',
-        objectives: ['Manage Design Phases (Conceptual to Detailed)', 'Bill of Quantities (BoQ) Preparation', 'Client Approval & Sign-off'],
-        keyTopics: ['CAD Modeling', 'Procurement', 'Project Handover', 'Feasibility Studies']
-      }
-    ]
-  },
-  {
-    id: 'sub-003',
-    subsidiary: Subsidiary.LUFTREIBER_AUTO,
-    title: 'Automotive Technician Curriculum (Levels 1-4)',
-    version: '1.0',
-    submittedBy: 'Academy Director',
-    submissionDate: '2026-02-18',
-    status: 'Pending Review',
-    complianceScore: 96,
-    requestNotes: 'Comprehensive modular structure attached. Assessment structure: Practical 60%, Theory 30%, Attendance 10%. Levels stack into Diploma in Automotive Technology.',
-    overview: 'A structured, competency-based framework divided into 4 levels, ranging from Foundation to Specialist. Heavy emphasis on practical workshop skills (up to 70%).',
-    modules: [
-      {
-        title: 'Level 1: Foundation (Safety & Basics)',
-        duration: '4 Weeks (160 Hrs)',
-        objectives: ['Understand workshop hazards & PPE', 'Perform oil service & fluid inspection', 'Identify major vehicle systems'],
-        keyTopics: ['Workshop Safety', 'Vehicle Systems Overview', 'Routine Maintenance', 'Tyres & Fluids']
-      },
-      {
-        title: 'Level 2: Core Technician',
-        duration: '8 Weeks (320 Hrs)',
-        objectives: ['Diagnose brake & suspension faults', 'Perform compression tests', 'Use multimeter & trace circuits'],
-        keyTopics: ['Brakes, Steering & Suspension', 'Engine Mechanical Basics', 'Auto Electrical Fundamentals', 'Service Diagnostics']
-      },
-      {
-        title: 'Level 3: Advanced Workshop Skills',
-        duration: '12 Weeks (480 Hrs)',
-        objectives: ['Interpret live data & scan tools', 'Diagnose sensor & ECU faults', 'Apply systematic fault-finding logic'],
-        keyTopics: ['Diagnostics & Scan Tools', 'Advanced Auto Electrical', 'HVAC & Comfort Systems', 'Fault-Finding Methodology']
-      },
-      {
-        title: 'Level 4: Specialist Programs',
-        duration: '4-8 Weeks',
-        objectives: ['High-voltage safety (EV/Hybrid)', 'ECU architecture & repair', 'Preventive fleet maintenance'],
-        keyTopics: ['Electric & Hybrid Vehicles', 'ECU Diagnostics', 'CNG Systems', 'Fleet Maintenance']
-      }
-    ]
-  },
-  {
-    id: 'sub-001',
-    subsidiary: Subsidiary.BRIGHT_FM,
-    title: 'Broadcast Training Manual (Version 1.0)',
-    version: '1.0',
-    submittedBy: 'Antah Benedict Aondofa (Training Supervisor)',
-    submissionDate: '2026-02-12',
-    status: 'Pending Review',
-    complianceScore: 88,
-    requestNotes: 'Submitted for review and consideration. Seeking approval for pilot implementation and adaptation as a template for other media subsidiaries.',
-    overview: 'Foundational training manual for broadcast operations, developed from subsidiary SOPs and structured for standardization.',
-    modules: [
-      {
-        title: 'Module 1: Staff Induction & Orientation',
-        objectives: ['Understand EIB Group & Bright FM values', 'Broadcasting Ethics', 'Health, Safety & Security'],
-        keyTopics: ['Org Structure', 'Workplace Conduct', 'Training Pathway']
-      },
-      {
-        title: 'Module 2: Programme Preparation & Presentation',
-        objectives: ['Develop structured outlines', 'Demonstrate professional delivery', 'Handle live interactions'],
-        keyTopics: ['Editorial compliance', 'Voice control', 'Interview techniques']
-      },
-      {
-        title: 'Module 3: Studio Operations',
-        objectives: ['Identify studio equipment', 'Operate mixing console', 'Follow safety protocols'],
-        keyTopics: ['Pre-broadcast checklist', 'Emergency fault handling', 'Playout software']
-      },
-      {
-        title: 'Module 4: Advertising & Sponsorship',
-        objectives: ['Advertisement approval workflow', 'Payment confirmation', 'On-air disclosure'],
-        keyTopics: ['Revenue protection', 'NBC regulations', 'Log management']
-      },
-      {
-        title: 'Module 5: Professional Conduct & Ethics',
-        objectives: ['Apply broadcasting ethics', 'Maintain confidentiality', 'Avoid conflicts of interest'],
-        keyTopics: ['Social Media Conduct', 'Whistleblowing', 'Dress code']
-      },
-      {
-        title: 'Module 6: Audience Engagement',
-        objectives: ['Handle complaints respectfully', 'Document feedback', 'Escalate issues'],
-        keyTopics: ['Complaint Log Template', 'Escalation Framework', 'On-air tone']
-      }
-    ]
-  },
-  {
-    id: 'sub-002',
-    subsidiary: Subsidiary.BRIECH_UAS,
-    title: 'RPAS (Drone) Training Curriculum',
-    version: '2.0 (Aug 2025)',
-    submittedBy: 'Mubarak Sani (Chief Pilot)',
-    submissionDate: '2025-08-15',
-    status: 'Changes Requested',
-    complianceScore: 92,
-    overview: 'Comprehensive curriculum for Remotely Piloted Aircraft Systems (RPAS) covering entry-level to advanced BVLOS operations.',
-    requestNotes: 'Standardization for field personnel flying under Briech UAS authority. Includes NCAA compliance modules.',
-    modules: [
-      {
-        title: 'Company Indoctrination',
-        duration: '1 Week',
-        objectives: ['Familiarize with mission & values', 'Understand Safety Management System (SMS)', 'Regulatory Compliance (NCAA)'],
-        keyTopics: ['Code of Conduct', 'Aerodynamics', 'Airspace Management']
-      },
-      {
-        title: 'Model-Specific RPA Type Training',
-        duration: '2 Weeks',
-        objectives: ['System Overview', 'Pre-flight Procedures', 'Emergency Recovery'],
-        keyTopics: ['GCS Setup', 'Firmware Updates', 'Manual Override']
-      },
-      {
-        title: 'BVLOS Transition Training',
-        duration: '1 Week',
-        objectives: ['Understand BVLOS regulations', 'Airspace Risk Management', 'SORA (Specific Operations Risk Assessment)'],
-        keyTopics: ['DAA Tech', 'NOTAM review', 'Contingency drills']
-      },
-      {
-        title: 'Maintenance & System Specifics',
-        objectives: ['Airframe inspection', 'Battery management', 'Payload calibration'],
-        keyTopics: ['Hybrid Drones', 'Fixed-Wing maintenance', 'DJI Matrice 300']
-      }
-    ]
-  }
-];
+import { ProgramSubmission, UserProfile } from '../types';
+import { storageService } from '../services/storageService';
 
 interface TrainingManagerProps {
     user: UserProfile;
 }
 
 const TrainingManager: React.FC<TrainingManagerProps> = ({ user }) => {
-  // Filter submissions based on User Role
-  // If Group Admin -> See All
-  // If Subsidiary Manager -> See only their subsidiary
-  const visibleSubmissions = ALL_SUBMISSIONS.filter(sub => {
-    if (user.role === 'GROUP_ADMIN') return true;
-    return sub.subsidiary === user.subsidiary;
-  });
+  const [submissions, setSubmissions] = useState<ProgramSubmission[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
-  const [submissions, setSubmissions] = useState<ProgramSubmission[]>(visibleSubmissions);
-  const [selectedId, setSelectedId] = useState<string | null>(visibleSubmissions.length > 0 ? visibleSubmissions[0].id : null);
-
-  // Update filtered list when user changes
+  // Load from Storage
   useEffect(() => {
-    const filtered = ALL_SUBMISSIONS.filter(sub => {
-        if (user.role === 'GROUP_ADMIN') return true;
-        return sub.subsidiary === user.subsidiary;
-    });
-    setSubmissions(filtered);
-    setSelectedId(filtered.length > 0 ? filtered[0].id : null);
+    const data = storageService.getSubmissions(user);
+    setSubmissions(data);
+    if (data.length > 0) setSelectedId(data[0].id);
   }, [user]);
 
   const selectedProgram = submissions.find(s => s.id === selectedId);
 
   const handleStatusChange = (id: string, newStatus: ProgramSubmission['status']) => {
+    // Update local state
     setSubmissions(prev => prev.map(s => 
       s.id === id ? { ...s, status: newStatus } : s
     ));
+    // Update DB
+    storageService.updateSubmissionStatus(id, newStatus);
   };
 
   if (submissions.length === 0) {

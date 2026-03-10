@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FileQuestion, Send, Loader2, Copy, Check, MessageSquare, Sliders, Eye } from 'lucide-react';
+import { FileQuestion, Send, Loader2, Copy, Check, MessageSquare, Sliders, Eye, AlertCircle } from 'lucide-react';
 import { generateNeedsAssessmentSurvey } from '../services/geminiService';
 import { SurveyPlan } from '../types';
 
@@ -10,13 +10,32 @@ const NeedsAssessment: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [surveyPlan, setSurveyPlan] = useState<SurveyPlan | null>(null);
   const [copied, setCopied] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleGenerate = async () => {
     if (!focusArea || !intent) return;
     setLoading(true);
-    const result = await generateNeedsAssessmentSurvey(focusArea, respondentRole, intent);
-    setSurveyPlan(result);
-    setLoading(false);
+    setError(null);
+    setSurveyPlan(null);
+    
+    try {
+        const result = await generateNeedsAssessmentSurvey(focusArea, respondentRole, intent);
+        if (result) {
+            setSurveyPlan(result);
+        } else {
+            setError("The AI responded but returned an empty plan. Try refining your request.");
+        }
+    } catch (err: any) {
+        console.error("Survey Gen Error:", err);
+        const errorMessage = err.message || "Unknown error occurred";
+        if (errorMessage.includes("API Configuration Error")) {
+             setError("API Key is missing. Please check your environment configuration.");
+        } else {
+             setError(`Generation Failed: ${errorMessage}. Check console for details.`);
+        }
+    } finally {
+        setLoading(false);
+    }
   };
 
   const copyToClipboard = () => {
@@ -98,7 +117,14 @@ const NeedsAssessment: React.FC = () => {
 
         {/* Preview Panel */}
         <div className="lg:col-span-2 space-y-4">
-            {surveyPlan ? (
+            {error ? (
+                <div className="h-full min-h-[400px] bg-rose-50 rounded-xl border border-rose-200 flex flex-col items-center justify-center text-rose-500 p-6 text-center animate-fade-in">
+                    <AlertCircle size={48} className="mb-4" />
+                    <h3 className="text-lg font-bold text-rose-700">Generation Failed</h3>
+                    <p className="mt-2 text-sm max-w-sm text-rose-600">{error}</p>
+                    <button onClick={() => setError(null)} className="mt-4 text-xs font-bold text-rose-500 underline">Dismiss</button>
+                </div>
+            ) : surveyPlan ? (
                 <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden animate-fade-in">
                     <div className="bg-slate-50 p-6 border-b border-slate-200 flex justify-between items-start">
                         <div>
@@ -123,7 +149,7 @@ const NeedsAssessment: React.FC = () => {
                                         <p className="text-slate-800 font-medium text-lg mb-3">{q.question}</p>
                                         
                                         {/* Input Simulation based on type */}
-                                        {q.type === 'scale' && (
+                                        {q.type.toLowerCase() === 'scale' && (
                                             <div className="flex items-center space-x-4">
                                                 <div className="flex-1 h-2 bg-slate-100 rounded-full"></div>
                                                 <div className="flex justify-between w-full text-xs text-slate-400 uppercase font-bold tracking-wider mt-2">
@@ -133,11 +159,11 @@ const NeedsAssessment: React.FC = () => {
                                             </div>
                                         )}
                                         
-                                        {q.type === 'text' && (
+                                        {q.type.toLowerCase() === 'text' && (
                                             <div className="w-full h-20 bg-slate-50 border border-slate-200 rounded-lg border-dashed"></div>
                                         )}
 
-                                        {q.type === 'choice' && q.options && (
+                                        {q.type.toLowerCase() === 'choice' && q.options && (
                                             <div className="space-y-2">
                                                 {q.options.map((opt, i) => (
                                                     <div key={i} className="flex items-center space-x-2">
