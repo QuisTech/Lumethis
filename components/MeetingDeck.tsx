@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import html2canvas from 'html2canvas';
+import html2canvas from 'html2canvas-pro';
 import { jsPDF } from 'jspdf';
 import { 
   Download, Sparkles, Target, 
@@ -7,7 +7,7 @@ import {
   ArrowRight, CheckCircle2, Globe, Layout,
   AlertCircle, Clock, Loader2
 } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 
 const MeetingDeck: React.FC = () => {
   const componentRef = useRef<HTMLDivElement>(null);
@@ -18,76 +18,33 @@ const MeetingDeck: React.FC = () => {
     
     try {
       setIsGenerating(true);
-      // 'l' for landscape, 'mm' for millimeters, 'a4' [297 x 210]
-      const pdf = new jsPDF('l', 'mm', 'a4');
+      
+      const content = document.createElement('div');
+      content.style.width = '1280px';
+      content.style.background = '#f8fafc';
+      
       const slides = componentRef.current.querySelectorAll('.slide-container');
       
+      const pdf = new jsPDF({
+        orientation: 'landscape',
+        unit: 'px',
+        format: [1280, 720]
+      });
+      
       for (let i = 0; i < slides.length; i++) {
-        const slide = slides[i] as HTMLElement;
-        
-        const canvas = await html2canvas(slide, {
-          scale: 2, // High resolution
+        content.innerHTML = slides[i].innerHTML;
+        document.body.appendChild(content);
+
+        const canvas = await html2canvas(content, {
+          scale: 2,
           useCORS: true,
           logging: false,
-          backgroundColor: '#ffffff',
-          // Critical: Provide fixed dimensions to avoid the -1/-1 error
-          width: slide.offsetWidth,
-          height: slide.offsetHeight,
-          windowWidth: slide.scrollWidth,
-          windowHeight: slide.scrollHeight,
-          scrollX: 0,
-          scrollY: 0,
-          onclone: (clonedDoc) => {
-            // Inject a style tag to globally disable problematic styles
-            const styleSheet = document.createElement("style");
-            styleSheet.innerText = `
-              * {
-                filter: none !important;
-                backdrop-filter: none !important;
-              }
-            `;
-            clonedDoc.head.appendChild(styleSheet);
-
-            const elements = clonedDoc.querySelectorAll('*');
-            elements.forEach((el) => {
-              const element = el as HTMLElement;
-              const style = window.getComputedStyle(element);
-              
-              // More comprehensive list of color properties
-              const colorProps = [
-                'color', 'background-color', 'border-color', 
-                'border-top-color', 'border-right-color', 'border-bottom-color', 'border-left-color',
-                'fill', 'stroke', 'outline-color', 'text-decoration-color'
-              ];
-
-              colorProps.forEach(prop => {
-                try {
-                  const value = style.getPropertyValue(prop);
-                  if (value && (value.includes('oklab') || value.includes('oklch'))) {
-                    // Force a safe fallback for any css4 color functions
-                    element.style.setProperty(prop, '#0f172a', 'important'); 
-                  }
-                } catch (e) {
-                  // Ignore elements we can't style
-                }
-              });
-            });
-
-            // Additionally, replace any oklch/oklab variables in the root
-            const root = clonedDoc.documentElement;
-            const rootStyles = window.getComputedStyle(root);
-            for (let i = 0; i < rootStyles.length; i++) {
-              const prop = rootStyles[i];
-              if (prop.startsWith('--')) {
-                const value = rootStyles.getPropertyValue(prop);
-                if (value && (value.includes('oklch') || value.includes('oklab'))) {
-                  root.style.setProperty(prop, '#0f172a', 'important');
-                }
-              }
-            }
-          }
+          backgroundColor: '#f8fafc',
+          width: 1280,
+          height: 720,
         });
         
+        document.body.removeChild(content);
         const imgData = canvas.toDataURL('image/jpeg', 0.95);
         
         if (i > 0) pdf.addPage();
